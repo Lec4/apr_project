@@ -5,7 +5,7 @@ url: "https://lec4.github.io/apr_project/"  # Replace with your GitHub Pages URL
 author: Lily Codd # Your name
 
 # Theme settings
-theme: minima # You can replace this with other supported GitHub Pages themes like jekyll-theme-cayman, slate, etc.
+theme: jekyll-theme-cayman # You can replace this with other supported GitHub Pages themes like jekyll-theme-cayman, slate, etc.
 
 header_pages:
   - data.md
