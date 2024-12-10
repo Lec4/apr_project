@@ -44,7 +44,7 @@ Potential extensions of this analysis include:
 
 ## Author
 
-Lily Codd
+Lily Codd <br/> 
 Williams College, Class of '26
 
 ---
