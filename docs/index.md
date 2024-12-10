@@ -1,22 +1,21 @@
 ---
-title: "Home" # Title of the page
+title: "Multivariate Statistical Analysis Final Project" # Title of the page
 layout: default # This tells Jekyll to use the default layout (from the theme)
 ---
 # Academic Progress Rate Analysis for NCAA DI Athletes
 
 ## Overview
 
-This project aims to analyze the factors that influenced passenger survival rates in the Titanic disaster using statistical models. The goal is to identify key variables, explore relationships between them, and predict survival outcomes based on these variables.
+As a student-athlete, I know that balancing academics and athletics is very difficult. Some schools and teams have a harder time keeping their athletes eligible to play (by academic standards) than others. In this project, I wanted to find out what factors might influence academic progress rates, and by extension, retention rates, and whether these rates are similar among all sports at a specific school, or among similar schools (in terms of demographics). 
 
-- **Dataset**: [Kaggle Titanic Dataset](https://www.kaggle.com/c/titanic/data)
+- **Dataset Source**: [NCAA Website](https://www.ncaa.org/sports/2016/12/14/shared-ncaa-research-data.aspx)
 - **Tools Used**: R
 - **Statistical Methods**: Principal Component Analysis, K-Means Clustering, Canonical Correlation Analysis
 
-## Objectives
-
-1. Understand how passenger demographics (age, gender, class) affected survival rates.
-2. Build predictive models to estimate the probability of survival.
-3. Interpret the statistical significance of variables.
+## Objectives 
+1. Determine how many clusters to use and what variable(s) influence the clustering the most.
+2. Analyze cluster trends in various sports for a few selected schools.
+3. Perform CCA and determine which variables have the highest influence on the canonical covariates, as well as the correlation between canonical covariates.
 
 ## Table of Contents
 
@@ -24,37 +23,31 @@ This project aims to analyze the factors that influenced passenger survival rate
 - [Methodology](methodology.md)
 - [Results](results.md)
 - [Conclusion](conclusions.md)
-- [Code and Notebooks](https://xizhen-cai.github.io/sample_project/)
+- [Code and Notebooks](https://lec4.github.io/apr_project/)
 
 ## Key Findings
 
-- **Women and children** had a higher survival rate compared to men.
-- Passengers from **higher socio-economic classes** had a better chance of survival.
-- **Family size** also had an impact on survival, with smaller family groups more likely to survive.
+- 
 
-## Visualizations
 
-<img src="images/Survival_by_gender.png" alt="drawing" width="600"/>
-<img src="images/Survival_by_class.png" alt="drawing" width="600"/>
-
-You can explore the detailed analysis in the sections above. If you're interested in the code or methodology, feel free to check out the [GitHub repository](https://github.com/username/titanic-analysis).
+You can explore the detailed analysis in the sections above. If you're interested in the code or methodology, feel free to check out the [GitHub repository](https://github.com/Lec4/apr_project).
 
 ---
 ## Future Work
 
 Potential extensions of this analysis include:
-- Fine-tuning predictive models using additional variables.
-- Exploring survival rates using **more advanced machine learning techniques**.
-- Creating interactive dashboards for data exploration.
+- ***** 
+- ******
+- 
 
 ---
 
 ## Author
 
-List author name and any other related information about the author 
+Lily Codd
+Williams College, Class of '26
 
 ---
 
 ## References 
-
-List your references here.
+https://www.ncaa.org/sports/2016/12/14/shared-ncaa-research-data.aspx
