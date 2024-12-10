@@ -10,7 +10,7 @@ Before performing any statistical analysis, the data needed to be cleaned and pr
 
 - **Removing Variables**: 
   - There were originally 101 variables in the dataset. We wanted to remove variables that were not from 2019 and that were not neccessary for      analysis. We subsetted the data to only include the neccessary columns.
-  - We removed the "SCL_DIV_19" variable, which corresponded to which Division (I, II, or III) a given sport was in in 2019. After filtering        the data to only include Division I teams, this variable was removed as it was no longer needed. 
+  - We removed the "SCL_DIV_19" variable, which corresponded to which Division (I, II, or III) a given sport was in in 2019. After filtering        the data to only include Division I teams, this variable was removed as it was no longer needed.
 
 - **Handling Missing Values**: 
   - The `MULTIYR_APR_RATE_1000_OFFICIAL` variable had 15 missing values. These rows were excluded from the analysis.
@@ -19,13 +19,13 @@ Before performing any statistical analysis, the data needed to be cleaned and pr
   - The `MULTIYR_SQUAD_SIZE` variable had 15 missing values. These rows were excluded from the analysis.
   - The `PUB_AWARD_20` variable had 41 missing values. These rows were excluded from the analysis.
   
-- **Encoding Categorical Variables**:
+- **Encoding Categorical Variables and Feature Engineering**:
   - The categorical variables `Sex` and `Embarked` were converted into binary and encoded features, respectively.
   - `Pclass` (Passenger Class) was treated as a categorical variable, even though it is numeric (1, 2, 3).
 
-- **Feature Engineering**:
-  - Created a new variable `FamilySize` by combining the `SibSp` (siblings/spouses aboard) and `Parch` (parents/children aboard) variables.
-  - Created an indicator variable for whether a passenger was traveling alone (`IsAlone`).
+- **Subset and Scale**:
+  - In the end of the pre-processing, I subsetted the data to include all numeric variables in order to do K means clustering. 
+  - I scaled the data since some variables were measured on different scales than others. 
 
 ## 2. Exploratory Data Analysis (EDA)
 We conducted an Exploratory Data Analysis (EDA) to understand the relationships between different variables and survival. Key steps included:
