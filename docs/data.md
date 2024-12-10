@@ -28,6 +28,6 @@ The dataset consists of the following columns:
 | `MULTIYR_RET_RATE`| Four-year retention rate on 1,000-point scale |
 | `MULTIYR_SQUAD_SIZE`| Four-year squad size |
 | `PUB_AWARD_20`| Public recognition award for 2018-19 academic year, awarded in 2020 (Coding: 1 = team received award; 0 = team did not receive award) |
-| `Gender_Sport | Indicates what gender sports team it is (1= Men's sports teams, 0= Women's sports teams, 2= Mixed) |
+| `Gender_Sport` | Indicates what gender sports team it is (1= Men's sports teams, 0= Women's sports teams, 2= Mixed) |
 
 
