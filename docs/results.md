@@ -140,6 +140,47 @@ For the women's swim teams at Ivy League schools, we see all of them in clusters
 For the men's swim teams at Ivy League schools, on the graph they seem to be mostly in cluster 1 (middle), but when we check their cluster in the data, they are spread between clusters 3 and 2 (low and high academics). This difference is because when we look at cluster membership across multiple dimension, they appear in different clusters than if we just look at 2 dimensions, like in this graph. From the r output, we can see that Columbia, UPenn, and Brown are in cluster 2 (high academics), and the rest of the schools are in cluster 3 (low academics). 
 
 
+## 3. Canonical Correlation Analysis
+
+### a. CCA Plot
+
+<img src="images/CCA.jpg" alt="drawing" width="600"/>
+
+In the above plot, we see a strong correlation between all of the academic (x) variables (more red in color). In terms of the demographic variables (y), we see that `SPORT_CODE` and `Gender_Sport` are negatively correlated (blue). In the cross-correlation, `MULTIYR_RET_RATE` and  `SPORT_CODE` are positively correlated (orange), and `SCL_HBCU_numeric` and `MULTIYR_RET_RATE` seem slightly negatively correlated (blue). Otherwise, no variables seem to be significantly correlated from looking at the plot.
+
+### b. Number of Covariates to Use
+
+<img src="images/numberofcovariates.jpg" alt="drawing" width="600"/>
+<img src="images/wilkstestforcovariates.jpg" alt="drawing" width="600"/>
+
+While from the graph it looks as if we should use 2 canonical covariates, since the elbow is at 2, when we do the wilks test for significance of the covariates, we find that we should use all 4 covariates since they all have significant p values (<0.05). 
+
+### c. CCA Scatterplots
+
+<img src="images/CCA plots.jpg" alt="drawing" width="600"/>
+
+The scatterplots for the covariates are shown above. The top left is the scatterplot for u1 and v1, which seems to have a positive linear trend. The plot on the top right is u2 and v2, and seems to have a slightly positive linear trend/relationship. The bottom left plot is u3 and v3. It has a more random scatter, and does not seem to have a clear trend. Lastly, the bottom right plot is u4 and v4, and seems to have no linear trend and is grouped on the right of the plot. 
+
+### d. CCA Influence
+
+<img src="images/Ucorrel.jpg" alt="drawing" width="600"/>
+<img src="images/Vcorrel.jpg" alt="drawing" width="600"/>
+
+From the plots of the correlations between variables and canonical covariates above, we see that:
+- `MULTIYR_APR_RATE_1000_OFFICIAL`, `MULTIYR_ELIG_RATE`, and `MULTIYR_RET_RATE` have the most influence on u1 (represented by the top left barplot in the top picture).
+- `MULTIYR_APR_RATE_1000_OFFICIAL`, `MULTIYR_ELIG_RATE`, and `PUB_AWARD_20` have the most influence on u2 (top right plot in top picture).
+- `MULTIYR_APR_RATE_1000_OFFICIAL` and  `MULTIYR_RET_RATE` have the most influence on u3 (bottom left plot in picture).
+- `PUB_AWARD_20` has the most influence on u2 (bottom right graph in top picture).
+- `SPORT_CODE`, `SCL_HBCU_numeric`, and `Gender_Sport` have the most influence on v1 (top left of bottom picture).
+- `MULTIYR_SQUAD_SIZE` has the most influence on v2 (top right of the bottom picture).
+- `SPORT_CODE` and `SCL_HBCU_numeric` have the most influence on v3 (bottom left of bottom picture).
+- `SCL_PRIVATE_numeric` and `CONFNAME_19_numeric` have the most influence on v4 (bottom right of bottom picture)
+
+### e. Overall Correlation Structure Between Variables
+
+<img src="images/CCAcorrelations.jpg" alt="drawing" width="600"/>
+
+
 ## 6. Summary of Key Findings
 
 1. **Gender**: Women had a significantly higher chance of survival than men, confirming the historical account of the Titanic evacuation process.
