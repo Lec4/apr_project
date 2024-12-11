@@ -59,13 +59,16 @@ I employed multiple statistical methods to analyze the relationships between aca
 
 ### c. Canonical Correlation Analysis
 
-- **Goal**: To 
+- **Goal**: Figure out which variables are most correlated and which variables influence the canonical covariates the most. 
 - **Implementation**:
-  - 
-  - 
+  - Visualize the correlations in a CCA plot.
+  - Use scatterplots to visualize the correlation between canonical pairs.
+  - Use barplots to find which variables influence which canonical pair the most.
+  - Draw a diagram of the canonical correlations between variables and pairs.
   
 - **Results**:
-  - **Feature Importance**: 
+  - **Number of Covariates to Use**: 4 covariates was significant.
+  - **Variables That are Correlated**: The academic and demographic variables are positively correlated.
 
 ## 3. Limitations
 
