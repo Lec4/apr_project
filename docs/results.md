@@ -179,30 +179,25 @@ From the plots of the correlations between variables and canonical covariates ab
 ### e. Overall Correlation Structure Between Variables
 
 <img src="images/CCAcorrelations.jpg" alt="drawing" width="600"/>
+<img src="images/corrstructure.jpg" alt="drawing" width="600"/>
+
+The diagram above shows the correlation structure between the variables and their canonical covariates, with the correlations from the output above labeled on the diagram. u1 and v1 are fairly positively correlated with a correlation of 0.5566, and u2 and v2 are slightly correlated with a correlation of 0.2702. u1 represents academic variables and v1 represents dempgraphic variables, and there seems to be correlations between the two sets of variables. 
 
 
-## 6. Summary of Key Findings
+## 4. Summary of Key Findings
 
-1. **Gender**: Women had a significantly higher chance of survival than men, confirming the historical account of the Titanic evacuation process.
-2. **Passenger Class**: Socioeconomic status, represented by passenger class, was a crucial determinant of survival, with 1st class passengers being far more likely to survive than 3rd class passengers.
-3. **Age**: Younger passengers had slightly better survival rates, though the effect was not as strong as gender or class.
-4. **Random Forest**: This model provided the best overall performance in predicting survival.
-
----
-
-## 7. Limitations
-
-- **Imbalanced Data**: There are more non-survivors than survivors, which may slightly affect model accuracy.
-- **Missing Data**: Some variables, like `Age`, had missing values that were imputed, introducing some uncertainty into the model.
-- **Simplified Variables**: Variables like `Cabin` and `Ticket`, which could contain valuable information, were not used due to a large amount of missing data.
+1. **PCA**: 
+2. **K Means Clustering**:
+3. **School Clusters**:
+4. **CCA**:
 
 ---
 
-## Next Steps
+## 5. Limitations
 
-- **Hyperparameter Tuning**: Future work could focus on fine-tuning the random forest to achieve even better performance.
-- **Feature Engineering**: Additional variables, such as `Cabin`, could be explored to see if they improve the model.
-- **Ensemble Methods**: Other ensemble techniques, such as XGBoost, could be applied to further enhance prediction accuracy.
+
+---
+
 
 ---
 
