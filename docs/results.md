@@ -163,7 +163,7 @@ The scatterplots for the covariates are shown above. The top left is the scatter
 
 ### d. CCA Influence
 
-<img src="images/Ucorrel.jpg" alt="drawing" width="600"/>
+<img src="images/UCorrel.jpg" alt="drawing" width="600"/>
 <img src="images/Vcorrel.jpg" alt="drawing" width="600"/>
 
 From the plots of the correlations between variables and canonical covariates above, we see that:
