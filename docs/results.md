@@ -186,19 +186,27 @@ The diagram above shows the correlation structure between the variables and thei
 
 ## 4. Summary of Key Findings
 
-1. **PCA**: 
-2. **K Means Clustering**:
-3. **School Clusters**:
-4. **CCA**:
+1. **PCA**: PC1 was academic variables, PC2 was more influenced by sport, PC3 and 4 were demographics. PC1 had a large influence on the clustering. 
+2. **K Means Clustering**: 3 clusters was most informative. The clusters were split by academic success.
+3. **School Clusters**: Gender did seem to have an influence on academic success, with mens teams being less successful (an observation, not a significant conclusion). 
+4. **CCA**: The academic and demographic variables were highly positively correlated. 
 
 ---
 
 ## 5. Limitations
 
+1. **Few Demographic Variables**:
+   - The dataset did not include that many demographic variables due to confidentiality of the players. We could have had a better idea of how demographic variables affect academics if there were more to choose from.
+   
+2. **Data Doesn't Include Every NCAA Division**:
+   - We may have been able to see differences between sports teams more clearly if the schools differed more. It would be interesting to see this data for all three NCAA divisions rather than just Division I.
 
----
+3. **Optimal Number of Clusters Not Clear**:
+   - We used multiple graphs to try to find the optimal number of clusters, but there was not clear consensus, so th end result was a best guess at the optimal number based on the visualizations.
 
-
+4. **The Variables Measured Very Similar Things**:
+   - All of the academic variables measured very similar things, which is a good thing when we are trying to figure out which variables contribute most to the clustering, but could increase the risk of multicollinearity, which would negatively effect the k means clustering and PCA.
+  
 ---
 
 
