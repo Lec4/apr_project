@@ -69,5 +69,5 @@ It is also important to note that there could be limitations to this study due t
 
 By exploring additional variables and using new statistical methods, future analyses could improve these results and potentially find more significant observations in the data. 
 
-**Thank you for exploring this analysis! Feel free to check out the [GitHub repository](https://github.com/Lec4/apr_project) for code, data, and further details.**
+**Thank you for exploring this analysis! Feel free to check out the [GitHub repository](https://github.com/Lec4/apr_project/tree/main) for code, data, and further details.**
 
