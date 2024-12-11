@@ -18,7 +18,7 @@ The dataset consists of the following columns:
 | Column Name   | Description                                                                 |
 |---------------|-----------------------------------------------------------------------------|
 | `SCL_NAME`| Official name of institution|
-| `SPORT_CODE`| Sport identification (in code) |
+| `SPORT_CODE`| Sport identification (numbers in picture below this table correspond to each sport) |
 | `SPORT_NAME`| Sport name|
 | `CONFNAME_19`| Name of institution’s primary conference.|
 | `SCL_HBCU`| Indicates if the institution is a historically black college or university (Coding: 1 = Yes; 0= No)|
@@ -29,5 +29,9 @@ The dataset consists of the following columns:
 | `MULTIYR_SQUAD_SIZE`| Four-year squad size |
 | `PUB_AWARD_20`| Public recognition award for 2018-19 academic year, awarded in 2020 (Coding: 1 = team received award; 0 = team did not receive award) |
 | `Gender_Sport` | Indicates what gender sports team it is (1= Men's sports teams, 0= Women's sports teams, 2= Mixed) |
+
+<img src="images/sportcodes.jpg" alt="drawing" width="600"/>
+
+
 
 
