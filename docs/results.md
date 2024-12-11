@@ -99,35 +99,45 @@ The boxplot shows the distributions of APR scores in each cluster. There seems t
   
 <img src="images/UnivAlab..jpeg" alt="drawing" width="600"/>
 
-For the University of Alabama, men's sports are further left on the graph (in clusters 3 and 1) than women's sports (clusters 1 and 2), which indicates that men's sports perform lower academically than women's sports, in general. There are only men's sports in cluster 3 (lowest academic performance). Also, women's sports are higher on the graph than men's sports since PC2 controls the height of the variables on the graph and PC2 is largely influenced by the gender variable. Baseball is the furthest left (lowest academic performance) and Women's Volleyball is the furthest right (highest academic performance) for this school. Very few of the sports appear in cluster 2 (furthest right, highest academic performance). 
+For the University of Alabama, men's sports are further left on the graph (in clusters 3 and 1) than women's sports (clusters 1 and 2), which indicates that men's sports perform lower academically than women's sports, in general. There are only men's sports in cluster 3 (lowest academic performance). Also, women's sports are higher on the graph than men's sports since PC2 controls the height of the variables on the graph and PC2 is largely influenced by the gender variable. Baseball is the furthest left (lowest academic performance) and Women's Volleyball is the furthest right (highest academic performance) for this school. Only 4 of the sports appear in cluster 2 (furthest right, highest academic performance).
   
 - **Stanford University**:
   
 <img src="images/Stanford.jpeg" alt="drawing" width="600"/>
 
-For the sports at Stanford University, we see a similar trend with only men's sports appearing in cluster 3 (lowest academic performance cluster), and women's sports appearing further right on the plot (higher academic performance). Among the highest academically performing teams are Women's water polo, women's golf, and women's field hockey (cluster 2). Again, Baseball is furthest left on the plot, with the lowest academic performance of this University (although, this is likely a coincidence, not enough evidence to call this a correlation even, just interesting to note). Among the lower academic scores are also men's gymnastics, men's swimming, and men's volleyball. In general, the sports appear closer together on the plot than those for the University of Alabama. 
+For the sports at Stanford University, we see a similar trend with only men's sports appearing in cluster 3 (lowest academic performance cluster), and women's sports appearing further right on the plot (higher academic performance). Among the highest academically performing teams are Women's water polo, women's golf, and women's field hockey (cluster 2). Again, Baseball is furthest left on the plot, with the lowest academic performance of this University (although, this is likely a coincidence, not enough evidence to call this a correlation even, just interesting to note). Among the lower academic scores are also men's gymnastics, men's swimming, and men's volleyball. In general, the sports appear closer together on the plot than those for the University of Alabama. There are 15 sports for Stanford that appear in cluster 2 (highest academic performance), which is far greater than the number of sports in cluster 2 for the University of Alabama.
 
 - **Yale**:
   
 <img src="images/Yale.jpeg" alt="drawing" width="600"/>
 
-For Yale University sports, we see the same trend with only men's sports appearing in cluster 3. The teams furthest right on the graph (best academics of the group) are women's volleyball and women's track/xc. The teams furthest left on the graph (lowest academic performance) are men's xc and men's golf. 
+For Yale University sports, we see the same trend with only men's sports appearing in cluster 3. The teams furthest right on the graph (best academics of the group) are women's volleyball and women's track/xc. The teams furthest left on the graph (lowest academic performance) are men's xc and men's golf. Although it doesn't look like it because clusters 1 and 2 overlap a bit, there are 17 teams in cluster 2 (highest academic performance), which is more than the 4 in cluster 2 from University of Alabama and than Stanford University. 
 
 - **Notre Dame**:
 
 <img src="images/NotreDame.jpeg" alt="drawing" width="600"/>
 
+Once again, we see that only men's sports appear in cluster 3. Some of the sports with the lowest academic performance (furthest left) are football, baseball, men's golf, and men's lacrosse. Some of the sports with the highest academic performance (in cluster 2) are women's track/xc, men's soccer, women's volleyball, men's tennis. Notre Dame has 13 sports in cluster 2. A lot of the sports also appear very close on the graph, which could indicate that various academic and demographic factors are similar for many sports at Notre Dame. 
+
 - **UConn**:
 
 <img src="images/UConn.jpeg" alt="drawing" width="600"/>
 
+We see the same trend with only men's teams being in cluster 3 for this graph. Some of the sports that are farthest left (lowest academics) include baseball, football, men's swimming, men's cross country, and men's basketball. The majority of the sports are in the middle in terms of academics, and are in cluster 1. Cluster 1 only contains women's sports. There are 5 sports in cluster 2 (high academic performance), which include men's basketball, men's tennis, men's ice hockey, men's golf, and women's tennis. There are more men's teams in the highest academic performance cluster than women's teams, which is interesting because the lowest academic cluster only consists of men's teams.
+
 - **Women's Swim Ivies**:
 
 <img src="images/womensswimivy.jpeg" alt="drawing" width="600"/>
+<img src="images/womensswimcluster.jpg" alt="drawing" width="600"/>
+
+For the women's swim teams at Ivy League schools, we see all of them in clusters 1 and 2 (middle and high academics). Yale, Harvard, Columbia, and Dartmouth are in cluster 2 (highest) and Princeton, Cornell, UPenn, and Brown are in cluster 1 (middle). There are no teams in cluster 3 (lowest academic scores), which aligns with what we might expect from an Ivy League sports team. Interestingly, the points are fairly spread out vertically, so there must be some demographic factor in PC2 contributing to this difference between the schools. 
 
 - **Men's Swim Ivies**:
 
 <img src="images/MensSwimIvy.jpeg" alt="drawing" width="600"/>
+<img src="images/mensswimcluster.jpg" alt="drawing" width="600"/>
+
+For the men's swim teams at Ivy League schools, on the graph they seem to be mostly in cluster 1 (middle), but when we check their cluster in the data, they are spread between clusters 3 and 2 (low and high academics). This difference is because when we look at cluster membership across multiple dimension, they appear in different clusters than if we just look at 2 dimensions, like in this graph. From the r output, we can see that Columbia, UPenn, and Brown are in cluster 2 (high academics), and the rest of the schools are in cluster 3 (low academics). 
 
 
 ## 6. Summary of Key Findings
