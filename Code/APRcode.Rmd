@@ -1,0 +1,590 @@
+---
+title: "Project2"
+output: pdf_document
+date: "2024-11-27"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+APRdata <- read.csv("APRdata.txt", header = TRUE, sep = ",", stringsAsFactors = FALSE)
+
+```
+
+## Cleaning the Data
+
+```{r}
+library(dplyr)
+library(stringr)
+library(tidyr)
+#take out variables not from 2019
+#academic year all 2019 bc it's most recent yr of collection
+APR <- APRdata[c("SCL_NAME", "SPORT_CODE", "SPORT_NAME", "SCL_DIV_19", "CONFNAME_19", "SCL_HBCU", "SCL_PRIVATE", "MULTIYR_APR_RATE_1000_OFFICIAL", "RAW_OR_CI", "MULTIYR_ELIG_RATE", "MULTIYR_RET_RATE", "MULTIYR_SQUAD_SIZE", "PUB_AWARD_20")]
+
+#take out division 2 and 3 from SCL_DIV_19
+APR <- APR %>%
+  filter(SCL_DIV_19 == "1")
+
+na_counts <- colSums(is.na(APR))
+
+na_counts[na_counts > 0]
+
+#Remove rows with NA values
+APR <- na.omit(APR)
+
+#make a new variable for women's versus mens sports 
+APR$Gender_Sport <- ifelse(
+  grepl("^Men's|Baseball|Football", APR$SPORT_NAME), 1, 
+  ifelse(grepl("^Women's", APR$SPORT_NAME), 0, 
+         ifelse(APR$SPORT_NAME == "Mixed Rifle", 2, NA))
+)
+
+#1 = Men's sports (Baseball, Football, and sports starting with "Men's")
+#0 = Women's sports (sports starting with "Women's")
+#2 = Mixed sports (specifically "Mixed Rifle")
+#NA = For any entries not matching the criteria
+
+#now get rid of division
+APR$SCL_DIV_19 <- NULL
+
+```
+
+
+
+```{r}
+library(dplyr)
+library(factoextra)
+library(cluster)
+
+#make conf name as numeric and use 
+#make hbcu 0 and 1 and make the private public 0 and 1
+APR_subset <- APR %>%
+  mutate(
+    CONFNAME_19_numeric = as.numeric(as.factor(CONFNAME_19)), #Convert to numeric
+    SCL_HBCU_numeric = ifelse(SCL_HBCU == "Y", 1, 0),        #Convert Y/N to 0/1
+    SCL_PRIVATE_numeric = ifelse(SCL_PRIVATE == "Y", 1, 0)   #Convert Y/N to 0/1
+  ) 
+
+numeric_columns <- APR_subset[, sapply(APR_subset, is.numeric)]
+
+#Scale the data
+scaled_data <- scale(numeric_columns)
+
+```
+
+
+
+```{r}
+#Elbow Method
+
+#Initialize variables for within-cluster sum of squares (WCV)
+n <- nrow(scaled_data)
+wcv <- rep(0, 6)
+
+#Compute WCV for k = 1 to 6
+wcv[1] <- (n - 1) * sum(apply(scaled_data, 2, var))  # WCV for k = 1
+for (k in 2:6) {
+  kmeans_result <- kmeans(scaled_data, centers = k, nstart = 25)
+  wcv[k] <- sum(kmeans_result$withinss)
+}
+
+
+plot(1:6, wcv, type = "b", pch = 19, frame = FALSE,
+     xlab = "Number of Clusters (k)",
+     ylab = "Within-Cluster Sum of Squares (WCV)",
+     main = "Elbow Curve for Optimal Clusters")
+```
+
+
+
+
+```{r}
+#Ch Index
+
+library(fpc)
+
+ch <- rep(0, 10)
+
+for (i in 1:10) {
+  km <- kmeans(scaled_data, centers = i)
+  ch[i] <- calinhara(scaled_data, km$cluster)
+}
+
+plot(1:10, ch, type = "b", pch = 19, frame = FALSE,
+     xlab = "Number of Clusters (k)",
+     ylab = "Calinski-Harabasz Index",
+     main = "Calinski-Harabasz Index for Optimal Clusters")
+
+```
+```{r}
+#Gap stat
+library(cluster)
+gap_stat=clusGap(scaled_data, FUN=kmeans, nstart=25, K.max=6, B=30)
+fviz_gap_stat(gap_stat)
+```
+
+```{r}
+#PCA
+
+myprcomp<-prcomp(scaled_data, scale. = FALSE)
+myprcomp
+summary(myprcomp)
+myprcomp_w_names<-cbind(myprcomp$x, APR$SPORT_NAME, APR$SCL_NAME)
+head(myprcomp_w_names)
+```
+
+```{r}
+myprcomp <- prcomp(scaled_data, scale. = FALSE)
+
+loadings <- myprcomp$rotation
+
+par(mfrow = c(2, 2))
+
+barplot(loadings[, 1], las = 2, cex.names = 0.8, col = "skyblue",
+        main = "Variable Contributions to PC1",
+        xlab = "", ylab = "Contribution")
+
+barplot(loadings[, 2], las = 2, cex.names = 0.8, col = "orange2",
+        main = "Variable Contributions to PC2",
+        xlab = "", ylab = "Contribution")
+
+barplot(loadings[, 3], las = 2, cex.names = 0.8, col = "blue4",
+        main = "Variable Contributions to PC3",
+        xlab = "", ylab = "Contribution")
+
+barplot(loadings[, 4], las = 2, cex.names = 0.8, col = "pink2",
+        main = "Variable Contributions to PC4",
+        xlab = "", ylab = "Contribution")
+
+```
+
+
+
+
+```{r}
+#2 clusters
+#K-means clustering
+set.seed(123) 
+k <- 2
+kmeans_result <- kmeans(scaled_data, centers = k, nstart = 25)
+
+fviz_cluster(kmeans_result, data = scaled_data, geom = "point", ellipse.type = "convex", main = "Cluster Plot") + theme_bw() + theme(text = element_text(family = "Times"))
+```
+
+
+
+```{r}
+#calculate the cluster centers- extracts centroids 
+centers <- kmeans_result$centers      #creates a matrix where each row corresponds to the center of a cluster, and each column corresponds to a variable
+
+#convert to a data frame
+centers_df <- as.data.frame(centers)
+centers_df$Cluster <- rownames(centers_df)
+
+#reshape data- Reshapes the data from a wide format (one row per cluster) to a long format (one row per variable-cluster combination) - need this to use ggplot
+library(reshape2)
+centers_melt <- melt(centers_df, id.vars = "Cluster", variable.name = "Variable", value.name = "Contribution")
+
+
+# dodge places bars for clusters side by side for each variable
+# plot visualizes the contributions of each variable to the cluster centers (mean positions of all data points in a cluster)
+# y axis is how much that variable contributes to cluster compared to other clusters
+# Higher bars: variable strongly influences a cluster
+# Smaller bars (closer to 0): variable contributes minimally to that cluster
+# Negative bars: variable is inversely related to that cluster
+
+ggplot(centers_melt, aes(x = Variable, y = Contribution, fill = Cluster)) +geom_bar(stat = "identity", position = "dodge") + ggtitle("Cluster Variable Contributions") + theme_bw() + theme(axis.text.x = element_text(family = "Times", angle = 45, hjust = 1))+ theme(text = element_text(family = "Times"))
+```
+
+
+
+```{r}
+#k means with 3 clust
+set.seed(123) 
+k <- 3
+kmeans_result2 <- kmeans(scaled_data, centers = k, nstart = 25)
+
+
+fviz_cluster(kmeans_result2, data = scaled_data,geom = "point", ellipse.type = "convex", main = "Cluster Plot", axes = c(1, 2)) + theme_bw() + theme(text = element_text(family = "Times") )
+```
+
+
+```{r}
+#calculate the cluster centers
+centers2 <- kmeans_result2$centers
+
+#convert to a data frame
+centers_df2 <- as.data.frame(centers2)
+centers_df2$Cluster <- rownames(centers_df2)
+
+#reshape data
+library(reshape2)
+centers_melt2 <- melt(centers_df2, id.vars = "Cluster", variable.name = "Variable", value.name = "Contribution")
+
+ggplot(centers_melt2, aes(x = Variable, y = Contribution, fill = Cluster)) +geom_bar(stat = "identity", position = "dodge")  +ggtitle("Cluster Variable Contributions") + theme_bw() + theme(axis.text.x = element_text(family = "Times", angle = 45, hjust = 1)) + theme(text = element_text(family = "Times"))
+
+
+```
+
+```{r}
+#pc 1 vs 3
+set.seed(123) 
+k <- 3
+kmeans_result2 <- kmeans(scaled_data, centers = k, nstart = 25)
+
+
+fviz_cluster(kmeans_result2, data = scaled_data, geom = "point", labelsize= 6, ellipse.type = "convex", main = "Cluster Plot", axes = c(1, 3)) + theme_bw() + theme(text = element_text(family = "Times") )
+```
+
+
+```{r}
+#pc 1 and 4
+set.seed(123) 
+k <- 3
+kmeans_result2 <- kmeans(scaled_data, centers = k, nstart = 25)
+
+
+fviz_cluster(kmeans_result2, data = scaled_data, geom = "point", labelsize= 6, ellipse.type = "convex", main = "Cluster Plot", axes = c(1, 4)) + theme_bw() + theme(text = element_text(family = "Times") )
+```
+
+
+```{r}
+#k means with 3 clust- dim 2 and 3
+set.seed(123) 
+k <- 3
+kmeans_result2 <- kmeans(scaled_data, centers = k, nstart = 25)
+
+
+fviz_cluster(kmeans_result2, data = scaled_data, geom = "point", labelsize= 6, ellipse.type = "convex", main = "Cluster Plot", axes = c(2, 3)) + theme_bw() + theme(text = element_text(family = "Times") )
+```
+
+
+```{r}
+scaled_data_w_names<-cbind(scaled_data, APR$SPORT_NAME, APR$SCL_NAME)
+scaled_data_w_names[50, ]
+```
+
+
+```{r}
+#k means with 3 clust- with numbers
+set.seed(123) 
+k <- 3
+kmeans_result2 <- kmeans(scaled_data, centers = k, nstart = 25)
+
+
+fviz_cluster(kmeans_result2, data = scaled_data, geom = "text", labelsize=6, ellipse.type = "convex", main = "Cluster Plot", axes = c(1, 2)) + theme_bw() + theme(text = element_text(family = "Times") )
+```
+
+
+```{r}
+#Add cluster labels to the original data
+cluster_assignments <- kmeans_result2$cluster
+clustered_data <- cbind(APR, Cluster = cluster_assignments)
+
+
+head(clustered_data)
+
+scaled_data_with_names <- cbind(scaled_data, 
+                                School_Name = APR$SCL_NAME, 
+                                Sport_Name = APR$SPORT_NAME, 
+                                Cluster = kmeans_result2$cluster)
+#Subset data by cluster
+cluster_1 <- clustered_data[clustered_data$Cluster == 1, ]
+cluster_2 <- clustered_data[clustered_data$Cluster == 2, ]
+cluster_3 <- clustered_data[clustered_data$Cluster == 3, ]
+
+head(cluster_1)
+
+library(dplyr)
+cluster_summary <- clustered_data %>%
+  group_by(Cluster) %>%
+  summarise(School_Count = n(),
+            Sports_Count = n_distinct(SPORT_NAME),
+            Avg_APR = mean(MULTIYR_APR_RATE_1000_OFFICIAL, na.rm = TRUE))
+print(cluster_summary)
+```
+
+```{r}
+library(ggplot2)
+
+#side-by-side boxplot for APR scores by cluster
+ggplot(clustered_data, aes(x = as.factor(Cluster), y = MULTIYR_APR_RATE_1000_OFFICIAL, fill = as.factor(Cluster))) +geom_boxplot() +labs(title = "Distribution of APR Scores by Cluster",x = "Cluster",y = "APR Scores",fill = "Cluster") +theme_bw() +theme(text = element_text(family = "Times"),axis.text.x = element_text(size = 12),axis.text.y = element_text(size = 12),plot.title = element_text(size = 16, hjust = 0.5))
+
+```
+
+
+```{r}
+#finding outliers
+#Filter data for Cluster 3
+cluster_3_data <- clustered_data[clustered_data$Cluster == 3, ]
+
+#IQR
+Q1 <- quantile(cluster_3_data$MULTIYR_APR_RATE_1000_OFFICIAL, 0.25, na.rm = TRUE)
+Q3 <- quantile(cluster_3_data$MULTIYR_APR_RATE_1000_OFFICIAL, 0.75, na.rm = TRUE)
+IQR_value <- Q3 - Q1
+
+
+lower_bound <- Q1 - 1.5 * IQR_value
+upper_bound <- Q3 + 1.5 * IQR_value
+
+#Identify outliers
+outliers <- cluster_3_data[cluster_3_data$MULTIYR_APR_RATE_1000_OFFICIAL < lower_bound |
+                            cluster_3_data$MULTIYR_APR_RATE_1000_OFFICIAL > upper_bound, ]
+
+print(outliers)
+
+```
+
+
+
+
+
+
+
+```{r}
+#View row
+scaled_data_with_names[50, ]
+```
+
+
+```{r}
+#Highlight Alabama
+highlight_university <- "University of Alabama"
+
+highlight_rows <- which(APR$SCL_NAME == highlight_university)
+
+highlight_coords <- scaled_data[highlight_rows, ]
+
+highlight_data <- data.frame(highlight_coords,
+                             Sport_Name = APR$SPORT_NAME[highlight_rows],
+                             Cluster = kmeans_result2$cluster[highlight_rows])
+
+fviz_cluster(kmeans_result2, data = scaled_data, ellipse.type = "convex", main = paste("Cluster Plot Highlighted:", highlight_university), axes = c(1, 2), geom = "point") + geom_point(data = highlight_data, aes(x = highlight_coords[, 1], y = highlight_coords[, 2]), color = "red", size = 3) + geom_text(data = highlight_data, aes(x = highlight_coords[, 1], y = highlight_coords[, 2], label = Sport_Name), color = "black", size = 2.5,  fontface = "bold", vjust = -1) +theme_bw() +theme(text = element_text(family = "Times"))
+
+```
+
+```{r}
+#Highlight stanford
+highlight_university <- "Stanford University"
+
+
+highlight_rows <- which(APR$SCL_NAME == highlight_university)
+
+
+highlight_coords <- scaled_data[highlight_rows, ]
+
+
+highlight_data <- data.frame(highlight_coords,
+                             Sport_Name = APR$SPORT_NAME[highlight_rows],
+                             Cluster = kmeans_result2$cluster[highlight_rows])
+
+
+fviz_cluster(kmeans_result2, data = scaled_data, ellipse.type = "convex", main = paste("Cluster Plot Highlighting:", highlight_university), axes = c(1, 2), geom = "point") + geom_point(data = highlight_data, aes(x = highlight_coords[, 1], y = highlight_coords[, 2]), color = "red", size = 3) + geom_text(data = highlight_data, aes(x = highlight_coords[, 1], y = highlight_coords[, 2], label = Sport_Name), color = "black", size = 2.5,  fontface = "bold", vjust = -1) +theme_bw() +theme(text = element_text(family = "Times"))
+```
+
+```{r}
+#Highlight Yale
+highlight_university <- "Yale University"
+
+highlight_rows <- which(APR$SCL_NAME == highlight_university)
+
+
+highlight_coords <- scaled_data[highlight_rows, ]
+
+
+highlight_data <- data.frame(highlight_coords,
+                             Sport_Name = APR$SPORT_NAME[highlight_rows],
+                             Cluster = kmeans_result2$cluster[highlight_rows])
+
+fviz_cluster(kmeans_result2, data = scaled_data, ellipse.type = "convex", main = paste("Cluster Plot Highlighting:", highlight_university), axes = c(1, 2), geom = "point") + geom_point(data = highlight_data, aes(x = highlight_coords[, 1], y = highlight_coords[, 2]), color = "red", size = 3) + geom_text(data = highlight_data, aes(x = highlight_coords[, 1], y = highlight_coords[, 2], label = Sport_Name), color = "black", size = 2.5,  fontface = "bold", vjust = -1) +theme_bw() +theme(text = element_text(family = "Times"))
+```
+
+
+```{r}
+#Highlight Notre Dame
+highlight_university <- "University of Notre Dame"
+
+
+highlight_rows <- which(APR$SCL_NAME == highlight_university)
+
+
+highlight_coords <- scaled_data[highlight_rows, ]
+
+
+highlight_data <- data.frame(highlight_coords,
+                             Sport_Name = APR$SPORT_NAME[highlight_rows],
+                             Cluster = kmeans_result2$cluster[highlight_rows])
+
+
+fviz_cluster(kmeans_result2, data = scaled_data, ellipse.type = "convex", main = paste("Cluster Plot Highlighting:", highlight_university), axes = c(1, 2), geom = "point") + geom_point(data = highlight_data, aes(x = highlight_coords[, 1], y = highlight_coords[, 2]), color = "red", size = 3) + geom_text(data = highlight_data, aes(x = highlight_coords[, 1], y = highlight_coords[, 2], label = Sport_Name), color = "black", size = 2.5,  fontface = "bold", vjust = -1) +theme_bw() +theme(text = element_text(family = "Times"))
+```
+
+```{r}
+#Highlight University of Connecticut
+highlight_university <- "University of Connecticut"
+
+
+highlight_rows <- which(APR$SCL_NAME == highlight_university)
+
+
+highlight_coords <- scaled_data[highlight_rows, ]
+
+
+highlight_data <- data.frame(highlight_coords,
+                             Sport_Name = APR$SPORT_NAME[highlight_rows],
+                             Cluster = kmeans_result2$cluster[highlight_rows])
+
+fviz_cluster(kmeans_result2, data = scaled_data, ellipse.type = "convex", main = paste("Cluster Plot Highlighting:", highlight_university), axes = c(1, 2), geom = "point") + geom_point(data = highlight_data, aes(x = highlight_coords[, 1], y = highlight_coords[, 2]), color = "red", size = 3) + geom_text(data = highlight_data, aes(x = highlight_coords[, 1], y = highlight_coords[, 2], label = Sport_Name), color = "black", size = 2.5,  fontface = "bold", vjust = -1) +theme_bw() +theme(text = element_text(family = "Times"))
+```
+
+
+
+
+```{r}
+#Filter rows for men's swim teams
+mens_swim_data <- clustered_data[grepl("Men's Swimming", clustered_data$SPORT_NAME, ignore.case = TRUE), ]
+
+#Filter rows for women's swim teams
+womens_swim_data <- clustered_data[grepl("Women's Swimming", clustered_data$SPORT_NAME, ignore.case = TRUE), ]
+```
+
+```{r}
+library(ggplot2)
+library(factoextra)
+
+#Define a vector of Ivy League school names
+ivy_league_schools <- c("Harvard University", "Yale University", "Princeton University",
+                        "Columbia University-Barnard College", "University of Pennsylvania", 
+                        "Dartmouth College", "Cornell University", "Brown University")
+
+
+#Filter for Ivy League men's swim teams
+mens_swim_ivies <- mens_swim_data[mens_swim_data$SCL_NAME %in% ivy_league_schools & 
+                                    mens_swim_data$SPORT_NAME == "Men's Swimming", ]
+#Filter for women's swim teams in Ivy League schools
+womens_swim_ivies <- womens_swim_data[womens_swim_data$SCL_NAME %in% ivy_league_schools, ]
+
+#Men's Swim Teams in Ivy League
+fviz_cluster(kmeans_result2, data = scaled_data, ellipse.type = "convex", main = "Cluster Plot Highlighting Men's Swim Teams (Ivy League)", axes = c(1, 2), geom = "point") + geom_point(data = mens_swim_ivies, aes(x = scaled_data[rownames(mens_swim_ivies), 1], y = scaled_data[rownames(mens_swim_ivies), 2]), color = "red", size = 3) +geom_text(data = mens_swim_ivies, aes(x = scaled_data[rownames(mens_swim_ivies), 1], y = scaled_data[rownames(mens_swim_ivies), 2], label = SCL_NAME), color = "black", size = 2.5, fontface = "bold", vjust = -1) +xlim(-5, 10) + ylim(-2, 2) +theme_bw() +theme(text = element_text(family = "Times"))
+
+```
+
+
+
+```{r}
+#Women's Swim Teams in Ivy League
+fviz_cluster(kmeans_result2, data = scaled_data, ellipse.type = "convex", main = "Cluster Plot Highlighting Women's Swim Teams (Ivy League)", axes = c(1, 2), geom = "point") + geom_point(data = womens_swim_ivies, aes(x = scaled_data[rownames(womens_swim_ivies), 1], y = scaled_data[rownames(womens_swim_ivies), 2]), color = "red", size = 3) +geom_text(data = womens_swim_ivies, aes(x = scaled_data[rownames(womens_swim_ivies), 1], y = scaled_data[rownames(womens_swim_ivies), 2], label = SCL_NAME), color = "black", size = 2.5, fontface = "bold", vjust = -1) +xlim(-5, 10) + ylim(-2, 2) +theme_bw() +theme(text = element_text(family = "Times"))
+
+```
+
+
+```{r}
+
+#cluster info
+mens_swim_ivies_clusters <- mens_swim_ivies[, c("SCL_NAME", "SPORT_NAME", "Cluster")]
+
+#cluster info for women
+womens_swim_ivies_clusters <- womens_swim_ivies[, c("SCL_NAME", "SPORT_NAME", "Cluster")]
+
+#men
+print("Men's Swim Teams (Ivy League) Clusters:")
+print(mens_swim_ivies_clusters)
+
+#women
+print("Women's Swim Teams (Ivy League) Clusters:")
+print(womens_swim_ivies_clusters)
+
+```
+
+
+
+
+
+```{r}
+#CCA
+
+library(CCA)
+library(ggplot2)
+
+academic_vars <- c("MULTIYR_APR_RATE_1000_OFFICIAL", "MULTIYR_ELIG_RATE", "MULTIYR_RET_RATE", "PUB_AWARD_20")
+demographic_vars <- c("SPORT_CODE", "SCL_PRIVATE_numeric", "SCL_HBCU_numeric", "MULTIYR_SQUAD_SIZE", "Gender_Sport", "CONFNAME_19_numeric")
+
+x <- as.matrix(scaled_data[, academic_vars])
+y <- as.matrix(scaled_data[, demographic_vars])
+
+correl=matcor(x,y); img.matcor(correl,type=2)
+```
+
+
+
+```{r}
+#CCA
+
+cc_result <- cc(x, y)
+
+#canonical correlations
+rho <- cc_result$cor
+print("Canonical Correlations:")
+print(rho)
+
+
+cc=cc(x,y)
+names(cc)
+(rho <- cc$cor)
+
+(rho <- cc$cor) 
+
+par(mfrow=c(1,1))
+plot(rho,type="b")
+
+```
+```{r}
+(rho <- cc$cor) #prop of variance 
+```
+
+```{r}
+n <- nrow(x)   #Number of observations
+p <- ncol(x)   #Number of variables in x
+q <- ncol(y)   #Number of variables in y
+library(CCP)
+p.asym(rho, n, p, q, tstat= "Wilks")
+```
+
+
+```{r}
+a<- cc$xcoef[,1:4]; u<- x%*%a
+b<- cc$ycoef[,1:4]; v<- y%*%b
+par(mfrow = c(2, 2), mar = c(4, 4, 2, 1))  
+for(i in 1:4) {
+  plot(u[, i], v[, i], asp = 1, main = paste("Plot", i))  # asp = 1 makes it square
+}
+
+round(a,4)
+round(b,4)
+round(cor(x,u),4)
+round(cor(y,v),4)
+```
+
+```{r}
+par(mfrow= c(2, 2))
+for (i in 1:4){ barplot(cc$scores$corr.X.xscores[,i], las=2, cex.names = 0.6)}
+for(i in 1:4){ barplot(cc$scores$corr.Y.yscores[,i], las=2, cex.names = 0.6)}
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
