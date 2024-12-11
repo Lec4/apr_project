@@ -17,10 +17,11 @@ In this section, we present the key results from the statistical analysis and mo
 <img src="images/PCBargraphs.jpeg" alt="drawing" width="600"/>
 
 From the above PCA output and barplots, we can see that:
-    - PC1 is mostly influenced by academic variables such as `MULTIYR_APR_RATE_1000_OFFICIAL`, `MULTIYR_ELIG_RATE`, and `MULTIYR_RET_RATE`. 
-    - PC2 is influenced by sport variables: `SPORT_CODE` and `Gender_Sport`
-    - PC3 is influenced by school demographics: `CONFNAME_19_numeric` and `SCL_HBCU_numeric`
-    - PC4 is influenced by team and school demographics: `MULTIYR_SQUAD_SIZE`, `CONFNAME_19_numeric`, `SCL_PRIVATE_numeric`
+* PC1 is mostly influenced by academic variables such as `MULTIYR_APR_RATE_1000_OFFICIAL`, `MULTIYR_ELIG_RATE`, and `MULTIYR_RET_RATE`.
+* PC2 is influenced by sport variables: `SPORT_CODE` and `Gender_Sport`
+* PC3 is influenced by school demographics: `CONFNAME_19_numeric` and `SCL_HBCU_numeric`
+* PC4 is influenced by team and school demographics: `MULTIYR_SQUAD_SIZE`, `CONFNAME_19_numeric`, `SCL_PRIVATE_numeric`
+
 Because 4 principal components contribute to a large amount of the variance at 71.7%, we will choose to use 4 principal components for our analysis. 
 
 ---
@@ -84,6 +85,49 @@ In the PC2 versus PC3 plot above, we see the most overlap in clusters (vertical 
 
 ### d. APR Scores in Each Cluster
 
+<img src="images/APRscoresclusters.jpg" alt="drawing" width="600"/>
+
+As we can see above, the average APR scores for each cluster increase on the cluster graph from left to right, with cluster 3 (leftmost) having an average APR score of 973, cluster 1 (middle) having an average APR score of 986, and cluster 2 (right) having an average APR score of 999. From this, we can see that sports teams with higher academic standings are further right on the cluster graph, and sports teams with lower academic standings are further left on the graph. The clustering is highly influenced by academic success of the teams. 
+
+<img src="images/BoxplotofAPRscores.jpg" alt="drawing" width="600"/>
+
+The boxplot shows the distributions of APR scores in each cluster. There seems to be a difference between the clusters in terms of APR scores since the error bars don't overlap that much, however, it may not be significant. There are a few outliers much lower in APR score than the rest for cluster 3. I looked into the outliers and found that the lowest score and most obvious outlier belonged to the Men's Basketball team at Stephen F. Austin State University. Through a quick google search, I found that they have had recent issues with keeping their players eligible to play (by academic standards) and had to forfeit some of their recent conference titles due to an administrative error in certifying eligibility for their players. While this point is a significant outlier, some other sports at their school are not outliers in the data, so it does not make sense to take out the school entirely or even this point. However, it is something to note and may skew the graphs slightly. 
+
+### e. Graphs by University and Sport
+
+- **University of Alabama**:
+  
+<img src="images/UnivAlab..jpeg" alt="drawing" width="600"/>
+
+For the University of Alabama, men's sports are further left on the graph (in clusters 3 and 1) than women's sports (clusters 1 and 2), which indicates that men's sports perform lower academically than women's sports, in general. There are only men's sports in cluster 3 (lowest academic performance). Also, women's sports are higher on the graph than men's sports since PC2 controls the height of the variables on the graph and PC2 is largely influenced by the gender variable. Baseball is the furthest left (lowest academic performance) and Women's Volleyball is the furthest right (highest academic performance) for this school. Very few of the sports appear in cluster 2 (furthest right, highest academic performance). 
+  
+- **Stanford University**:
+  
+<img src="images/Stanford.jpeg" alt="drawing" width="600"/>
+
+For the sports at Stanford University, we see a similar trend with only men's sports appearing in cluster 3 (lowest academic performance cluster), and women's sports appearing further right on the plot (higher academic performance). Among the highest academically performing teams are Women's water polo, women's golf, and women's field hockey (cluster 2). Again, Baseball is furthest left on the plot, with the lowest academic performance of this University (although, this is likely a coincidence, not enough evidence to call this a correlation even, just interesting to note). Among the lower academic scores are also men's gymnastics, men's swimming, and men's volleyball. In general, the sports appear closer together on the plot than those for the University of Alabama. 
+
+- **Yale**:
+  
+<img src="images/Yale.jpeg" alt="drawing" width="600"/>
+
+For Yale University sports, we see the same trend with only men's sports appearing in cluster 3. The teams furthest right on the graph (best academics of the group) are women's volleyball and women's track/xc. The teams furthest left on the graph (lowest academic performance) are men's xc and men's golf. 
+
+- **Notre Dame**:
+
+<img src="images/NotreDame.jpeg" alt="drawing" width="600"/>
+
+- **UConn**:
+
+<img src="images/UConn.jpeg" alt="drawing" width="600"/>
+
+- **Women's Swim Ivies**:
+
+<img src="images/womensswimivy.jpeg" alt="drawing" width="600"/>
+
+- **Men's Swim Ivies**:
+
+<img src="images/MensSwimIvy.jpeg" alt="drawing" width="600"/>
 
 
 ## 6. Summary of Key Findings
