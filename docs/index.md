@@ -22,7 +22,7 @@ As a student-athlete, I know that balancing academics and athletics is very diff
 - [Data Description](data.md)
 - [Methodology](methodology.md)
 - [Results](results.md)
-- [Conclusion](conclusions.md)
+- [Conclusion](conclusion.md)
 - [Code and Notebooks](https://lec4.github.io/apr_project/)
 
 ## Key Findings
